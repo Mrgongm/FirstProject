@@ -22,6 +22,11 @@
   </listener>
   
   
+  <session-config>
+  	<session-timeout>1</session-timeout>
+  </session-config>
+  
+  
    <servlet>
  	<servlet-name>IndexServlet</servlet-name>
 	 <servlet-class>servlet.IndexServlet</servlet-class>

@@ -57,6 +57,14 @@
         }
     </style>
     <script type="text/javascript">
+    
+    if(self!=top){
+    	top.location="User?type=showLogin"
+    }
+    
+    
+    
+    
     $().ready(function(){
     	$("#image").click(function(){
     		$(this).attr("src","User?type=randomImage&"+Math.random())

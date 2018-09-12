@@ -37,13 +37,23 @@ a {
 	background: #363636;
 	clear: both;
 }
-#top-text{
+#bottom-text{
 	color:#fff;
     height: 25px;
     font-size:13px;
     text-align:center;
     width: 180px;
        top: 660px;  
+    position: absolute;
+
+}
+#top-text{
+	color:#fff;
+    height: 25px;
+    font-size:13px;
+    text-align:center;
+    width: 180px;
+       top: 60px;  
     position: absolute;
 
 }
@@ -88,6 +98,58 @@ background:#3eb5ed;
 
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript">
+var websocket = null;
+
+//判断当前浏览器是否支持WebSocket
+if ('WebSocket' in window) {
+	websocket = new WebSocket("ws://192.168.0.120:8080/EmployeeWeb/websocket");
+} else {
+	alert('没有建立websocket连接')
+}
+
+//连接发生错误的回调方法
+websocket.onerror = function() {
+	setMessage("错误");
+};
+
+//连接成功建立的回调方法
+websocket.onopen = function(event) {
+	//setMessage("建立连接");
+}
+
+//接收到消息的回调方法
+websocket.onmessage = function(event) {
+	 $("#top-text").html("当前在线："+event.data+"人");
+}
+
+//连接关闭的回调方法
+websocket.onclose = function() {
+	//setMessage("close");
+}
+
+//监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口。
+window.onbeforeunload = function() {
+	websocket.close();
+}
+
+//将消息显示在网页上
+function setMessage(text) {
+	
+	
+}
+
+//关闭连接
+function closeWebSocket() {
+	websocket.close();
+}
+
+//发送消息
+function send() {
+	//var message = $("#text").val();
+	//websocket.send(message);
+}
+
+
 	$().ready(function(){
 		$(".yi:not(#yi-f)").click(function(){
 			$(this).toggleClass("select");
@@ -122,7 +184,7 @@ background:#3eb5ed;
 </head>
 <body>
 	<div id="container">
-		<div id="top"></div>
+		<div id="top"><div id="top-text">当前在线：${applicationScope.num }人</div></div>
 		<div id="main">
 			<div id="left">
 				
@@ -158,7 +220,7 @@ background:#3eb5ed;
 					<li><a href="Score?type=search" target="rightFrame">绩效查看</a></li>
 					<li><a href="Score?type=input" target="rightFrame">添加</a></li>
 				</ul>
-				<div id="top-text">本网站共有<%=application.getAttribute("num") %>人访问</div>
+				<div id="bottom-text">本网站共有<%=application.getAttribute("allnum") %>人访问</div>
 
 			</div>
 			<iframe id="right" name="rightFrame" scrolling="no" frameborder="0"
